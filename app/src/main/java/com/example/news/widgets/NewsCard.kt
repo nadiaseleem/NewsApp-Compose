@@ -1,5 +1,6 @@
-package com.example.news.utils
+package com.example.news.widgets
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,8 +32,12 @@ import com.example.news.ui.theme.lightGray
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun NewsCard(newsItem: NewsItem) {
-    Column(modifier = Modifier.padding(8.dp)) {
+fun NewsCard(newsItem: NewsItem,onNewsClick:((String)->Unit)?=null) {
+    Column(modifier = Modifier.padding(8.dp).clickable {
+        if (onNewsClick != null) {
+            onNewsClick(newsItem.title?:"")
+        }
+    }) {
 
         GlideImage(
             model = newsItem.urlToImage?:"",
@@ -85,5 +90,7 @@ fun PreviewNewsItem() {
             source = SourceItem(name = "ABC News"),
             publishedAt = "3 hours ago"
         ),
-    )
+    ){
+
+    }
 }

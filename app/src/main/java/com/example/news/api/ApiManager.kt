@@ -21,7 +21,7 @@ object ApiManager {
                 message
             )
         })
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         return loggingInterceptor
     }

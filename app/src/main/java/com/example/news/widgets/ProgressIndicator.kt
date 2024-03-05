@@ -1,4 +1,4 @@
-package com.example.news.utils
+package com.example.news.widgets
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

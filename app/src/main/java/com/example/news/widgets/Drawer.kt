@@ -1,4 +1,4 @@
-package com.example.news.utils
+package com.example.news.widgets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,7 +49,7 @@ fun NavigationDrawerSheet(onNavigateToCategoriesClick:()->Unit,onNavigateToSetti
                     .background(color = green), contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(id = R.string.news_app) + "!",
+                    text = stringResource(id = R.string.app_name),
                     color = Color.White,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
@@ -57,11 +57,11 @@ fun NavigationDrawerSheet(onNavigateToCategoriesClick:()->Unit,onNavigateToSetti
 
             }
             Spacer(modifier = Modifier.height(10.dp))
-            NavigationDrawerItem(R.drawable.ic_categories, "Categories"){
+            NavigationDrawerItem(R.drawable.ic_categories, stringResource(id = R.string.categories)){
                 onNavigateToCategoriesClick()
             }
             Spacer(modifier = Modifier.height(10.dp))
-            NavigationDrawerItem(R.drawable.ic_settings, "Settings"){
+            NavigationDrawerItem(R.drawable.ic_settings, stringResource(id = R.string.settings)){
                 onNavigateToSettingsClick()
             }
 
@@ -74,7 +74,9 @@ fun NavigationDrawerSheet(onNavigateToCategoriesClick:()->Unit,onNavigateToSetti
 @Composable
 fun NavigationDrawerItem(icon: Int, label: String,onNavigationItemClick: ()->Unit) {
 
-    Row(verticalAlignment = Alignment.CenterVertically,modifier=Modifier.fillMaxWidth().clickable{onNavigationItemClick()}) {
+    Row(verticalAlignment = Alignment.CenterVertically,modifier= Modifier
+        .fillMaxWidth()
+        .clickable { onNavigationItemClick() }) {
         Image(
             painter = painterResource(id = icon),
             contentDescription = label,

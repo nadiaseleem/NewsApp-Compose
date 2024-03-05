@@ -1,4 +1,4 @@
-package com.example.news.utils
+package com.example.news.widgets
 
 import android.util.Log
 import androidx.compose.foundation.background

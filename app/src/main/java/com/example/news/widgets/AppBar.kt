@@ -1,4 +1,4 @@
-package com.example.news.utils
+package com.example.news.widgets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,16 +27,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.news.R
 import com.example.news.ui.theme.green
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsTopAppBar(titleResourceId:Int, shouldDisplaySearchIcon:Boolean,shouldDisplayMenuIcon:Boolean, onSideMenuClick: () -> Unit = {}) {
-
-
+fun NewsTopAppBar(titleResourceId:Int?=null, titleString:String?=null, shouldDisplaySearchIcon:Boolean, shouldDisplayMenuIcon:Boolean, scope: CoroutineScope, drawerState: DrawerState,
+                  onSearchClick:(()->Unit)?=null) {
 
     TopAppBar(title = {
         Text(
-            text = stringResource(titleResourceId),
+            text = if (titleResourceId!=null)stringResource(titleResourceId) else titleString ?:"",
             style = MaterialTheme.typography.headlineSmall,
             color = Color.White,
             modifier = Modifier.fillMaxWidth(),
@@ -40,7 +45,11 @@ fun NewsTopAppBar(titleResourceId:Int, shouldDisplaySearchIcon:Boolean,shouldDis
         )
     }, actions = {
         if (shouldDisplaySearchIcon)
-        AppBarIconButton(R.drawable.ic_search)
+        AppBarIconButton(R.drawable.ic_search){
+            if (onSearchClick != null) {
+                onSearchClick()
+            }
+        }
         else
             Spacer(modifier = Modifier
                 .padding(10.dp)
@@ -48,7 +57,10 @@ fun NewsTopAppBar(titleResourceId:Int, shouldDisplaySearchIcon:Boolean,shouldDis
     }, colors = TopAppBarDefaults.topAppBarColors(containerColor = green),
         navigationIcon = {
             if (shouldDisplayMenuIcon)
-                AppBarIconButton(R.drawable.ic_feather_menu, onClick = onSideMenuClick)
+                AppBarIconButton(R.drawable.ic_feather_menu, onClick = {
+                    scope.launch {
+                    drawerState.open()
+                } })
             else
                 Spacer(modifier = Modifier
                     .padding(10.dp)
@@ -78,5 +90,8 @@ private fun AppBarIconButton(icon: Int, onClick: () -> Unit = {}) {
 @Preview(showSystemUi = true)
 @Composable
 private fun PreviewNewsTopAppBar() {
-    NewsTopAppBar(R.string.news_app,true,true)
+    NewsTopAppBar(titleResourceId = R.string.app_name, shouldDisplaySearchIcon = true, shouldDisplayMenuIcon = true, scope = rememberCoroutineScope(), drawerState = rememberDrawerState(
+        initialValue = DrawerValue.Closed
+    ))
+
 }
