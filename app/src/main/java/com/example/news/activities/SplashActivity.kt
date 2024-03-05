@@ -83,6 +83,6 @@ fun SplashScreen() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun _PreviewSplashScreen() {
+fun PreviewSplashScreen() {
     SplashScreen()
 }

@@ -49,10 +49,10 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun SettingsFragment(scope: CoroutineScope, drawerState: DrawerState) {
 
-    var shouldDisplaySearchIcon by rememberSaveable {
+    val shouldDisplaySearchIcon by rememberSaveable {
         mutableStateOf(false)
     }
-    var shouldDisplayMenuIcon by rememberSaveable {
+    val shouldDisplayMenuIcon by rememberSaveable {
         mutableStateOf(true)
     }
 

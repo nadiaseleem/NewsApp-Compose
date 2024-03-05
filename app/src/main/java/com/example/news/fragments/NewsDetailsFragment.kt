@@ -59,10 +59,10 @@ fun NewsDetailsScreen(title:String,scope: CoroutineScope, drawerState: DrawerSta
     var newsItem by rememberSaveable {
         mutableStateOf<NewsItem?>(null)
     }
-    var shouldDisplaySearchIcon by rememberSaveable {
+    val shouldDisplaySearchIcon by rememberSaveable {
         mutableStateOf(false)
     }
-    var shouldDisplayMenuIcon by rememberSaveable {
+    val shouldDisplayMenuIcon by rememberSaveable {
         mutableStateOf(false)
     }
     LaunchedEffect(key1 =Unit ) {

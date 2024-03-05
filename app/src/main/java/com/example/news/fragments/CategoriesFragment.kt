@@ -42,10 +42,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CategoriesFragment(scope:CoroutineScope,drawerState:DrawerState,onCategoryClick:(String,Int)->Unit) {
-    var shouldDisplaySearchIcon by rememberSaveable {
+    val shouldDisplaySearchIcon by rememberSaveable {
         mutableStateOf(false)
     }
-    var shouldDisplayMenuIcon by rememberSaveable {
+    val shouldDisplayMenuIcon by rememberSaveable {
         mutableStateOf(true)
     }
 

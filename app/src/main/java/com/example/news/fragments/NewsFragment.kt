@@ -41,10 +41,10 @@ fun NewsFragment(categoryID:String,categoryName:Int, scope: CoroutineScope, draw
     var newsList by remember {
         mutableStateOf(listOf<NewsItem>())
     }
-    var shouldDisplaySearchIcon by rememberSaveable {
+    val shouldDisplaySearchIcon by rememberSaveable {
         mutableStateOf(true)
     }
-    var shouldDisplayMenuIcon by rememberSaveable {
+    val shouldDisplayMenuIcon by rememberSaveable {
         mutableStateOf(true)
     }
     val context = LocalContext.current

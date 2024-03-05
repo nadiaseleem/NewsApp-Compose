@@ -67,7 +67,7 @@ class HomeActivity : AppCompatActivity() {
 
 @Composable
 fun NavigationDrawer() {
-    var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val navController = rememberNavController()
@@ -76,8 +76,8 @@ fun NavigationDrawer() {
         NavigationDrawerSheet(onNavigateToCategoriesClick = {
             navController.popBackStack()
 
-            if (navController.currentDestination?.route != Screen.CategoriesScreen.route) {
-                navController.navigate(Screen.CategoriesScreen.route)
+            if (navController.currentDestination?.route != "categories") {
+                navController.navigate("categories")
             }
             scope.launch {
                 drawerState.close()
