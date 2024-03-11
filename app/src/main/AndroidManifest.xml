@@ -14,12 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.News"
         android:localeConfig="@xml/locale_config"
+        android:name=".NewsApplication"
         tools:targetApi="33">
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".activities.splash.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+           >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

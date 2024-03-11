@@ -1,6 +1,5 @@
 package com.example.news.widgets
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -10,7 +9,6 @@ import com.example.news.model.article.NewsItem
 @Composable
 fun NewsList(newsList: List<NewsItem>, newsFoundState: Boolean, loadingState: Boolean,onNewsClick:(String)->Unit) {
 
-    Log.e("@@@", "NewsList composition")
 
     if (loadingState) {
 
@@ -38,6 +36,6 @@ fun NewsList(newsList: List<NewsItem>, newsFoundState: Boolean, loadingState: Bo
 @Composable
 private fun PreviewNewsList() {
     NewsList(listOf(), true,true){
-        
+
     }
 }

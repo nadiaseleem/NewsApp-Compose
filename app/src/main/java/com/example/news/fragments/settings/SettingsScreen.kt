@@ -1,6 +1,5 @@
-package com.example.news.fragments
+package com.example.news.fragments.settings
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,11 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
@@ -33,11 +28,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.news.R
 import com.example.news.activities.HomeActivity
 import com.example.news.ui.theme.Poppins
@@ -47,20 +42,13 @@ import com.example.news.widgets.NewsTopAppBar
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun SettingsFragment(scope: CoroutineScope, drawerState: DrawerState) {
-
-    val shouldDisplaySearchIcon by rememberSaveable {
-        mutableStateOf(false)
-    }
-    val shouldDisplayMenuIcon by rememberSaveable {
-        mutableStateOf(true)
-    }
+fun SettingsFragment(scope: CoroutineScope, drawerState: DrawerState,viewModel: SettingsViewModel= viewModel()) {
 
 
     Scaffold(topBar = {
         NewsTopAppBar(
-            shouldDisplaySearchIcon = shouldDisplaySearchIcon,
-            shouldDisplayMenuIcon = shouldDisplayMenuIcon,
+            shouldDisplaySearchIcon = false,
+            shouldDisplayMenuIcon = true,
             titleResourceId = R.string.settings,
             scope = scope,
             drawerState = drawerState
@@ -86,7 +74,7 @@ fun SettingsFragment(scope: CoroutineScope, drawerState: DrawerState) {
             )
 
             Spacer(Modifier.height(10.dp))
-            LanguageDropDownMenu()
+            LanguageDropDownMenu(viewModel)
         }
 
     }
@@ -96,45 +84,30 @@ fun SettingsFragment(scope: CoroutineScope, drawerState: DrawerState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LanguageDropDownMenu() {
+fun LanguageDropDownMenu(viewModel: SettingsViewModel) {
 
-    var isExpanded by rememberSaveable {
-        mutableStateOf(false)
-    }
+
     val activity = (LocalContext.current) as HomeActivity
 
-    val systemLanguage = when (Locale.current.language) {
-        "en" -> stringResource(id = R.string.english)
-        "ar" -> stringResource(id = R.string.arabic)
-        else -> stringResource(id = R.string.english)
-    }
-    var currentLanguage =
-        AppCompatDelegate.getApplicationLocales()[0]?.displayLanguage ?: systemLanguage
-
-    currentLanguage=if (currentLanguage=="Arabic") stringResource(id = R.string.arabic) else currentLanguage
 
 
-    var selectedLanguage by rememberSaveable {
-        mutableStateOf(currentLanguage)
-    }
-    Log.e("%%currentLanguage ",currentLanguage)
-    Log.e("%%selectedLanguage ",selectedLanguage)
+
 
 
     ExposedDropdownMenuBox(
-        expanded = isExpanded,
-        onExpandedChange = { isExpanded = it },
+        expanded = viewModel.isExpanded,
+        onExpandedChange = { viewModel.isExpanded = it },
         modifier = Modifier.fillMaxWidth()
     ) {
 
         OutlinedTextField(
-            value = selectedLanguage, onValueChange = {
+            value = viewModel.selectedLanguage, onValueChange = {
 
             }, readOnly = true,
 
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = isExpanded
+                    expanded = viewModel.isExpanded
                 )
             }, colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = green,
@@ -147,13 +120,13 @@ fun LanguageDropDownMenu() {
                 .fillMaxWidth()
         )
 
-        ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+        ExposedDropdownMenu(expanded = viewModel.isExpanded, onDismissRequest = { viewModel.isExpanded = false }) {
 
             DropdownMenuItem(text = {
                 Text(text = stringResource(id = R.string.english))
             }, onClick = {
-                selectedLanguage = "English"
-                isExpanded = false
+                viewModel.selectedLanguage = "English"
+                viewModel.isExpanded = false
                 AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"))
                 activity.finish()
                 activity.startActivity(activity.intent)
@@ -162,8 +135,8 @@ fun LanguageDropDownMenu() {
             DropdownMenuItem(text = {
                 Text(text = stringResource(id = R.string.arabic))
             }, onClick = {
-                selectedLanguage = "العربية"
-                isExpanded = false
+                viewModel.selectedLanguage = "العربية"
+                viewModel.isExpanded = false
                 AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("ar"))
                 activity.finish()
                 activity.startActivity(activity.intent)
