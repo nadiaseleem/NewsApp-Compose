@@ -22,12 +22,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.news.R
-import com.example.news.fragments.CategoriesFragment
-import com.example.news.fragments.NewsDetailsScreen
-import com.example.news.fragments.NewsFragment
-import com.example.news.fragments.SearchScreen
-import com.example.news.fragments.SettingsFragment
-import com.example.news.model.Screen
+import com.example.news.fragments.categories.CategoriesFragment
+import com.example.news.fragments.news.NewsFragment
+import com.example.news.fragments.newsdetails.NewsDetailsScreen
+import com.example.news.fragments.search.SearchScreen
+import com.example.news.fragments.settings.SettingsFragment
 import com.example.news.ui.theme.NewsTheme
 import com.example.news.widgets.NavigationDrawerSheet
 import kotlinx.coroutines.CoroutineScope
@@ -93,17 +92,12 @@ fun NavigationDrawer() {
     }, drawerState = drawerState) {
 
 
-            HomeLayout(scope, drawerState, navController)
+        NewsAppNavigation(navController, scope, drawerState)
 
 
     }
 }
 
-@Composable
-fun HomeLayout(scope: CoroutineScope, drawerState: DrawerState, navController: NavHostController) {
-
-    NewsAppNavigation(navController, scope, drawerState)
-}
 
 @Composable
 fun NewsAppNavigation(
@@ -112,10 +106,6 @@ fun NewsAppNavigation(
     drawerState: DrawerState
 ) {
 
-
-//    val currentBackStackEntry = navController.currentBackStackEntryAsState()
-//    val currentRoute = currentBackStackEntry.value?.destination?.route
-
     NavHost(
         navController = navController,
         startDestination = "categories"
@@ -123,8 +113,8 @@ fun NewsAppNavigation(
         composable("categories") {
 
             CategoriesFragment(
-                scope,
-                drawerState
+                scope=scope,
+                drawerState=drawerState
             ) { categoryApiID, categoryName ->
                 navController.navigate("news/$categoryApiID/$categoryName")
             }

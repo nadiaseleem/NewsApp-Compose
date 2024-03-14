@@ -1,5 +1,6 @@
-package com.example.news.activities
+package com.example.news.activities.splash
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,8 +28,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.news.R
+import com.example.news.activities.HomeActivity
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : ComponentActivity() {
+    private val viewModel by viewModels<SplashViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
             statusBarStyle=  SystemBarStyle.light(
@@ -37,19 +42,28 @@ class SplashActivity : ComponentActivity() {
         )
         super.onCreate(savedInstanceState)
         setContent {
-
             Surface(modifier=Modifier.fillMaxSize().navigationBarsPadding()){
-                Handler(Looper.getMainLooper()).postDelayed({
-                    startActivity(Intent(this, HomeActivity::class.java))
-                    finish()
-                }, 2000)
-                SplashScreen()
+
+                 SplashScreen()
+
+                viewModel.delegate = OnSplashNavigations {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        startActivity(Intent(this, HomeActivity::class.java))
+                        finish()
+                    }, 2000)
+                }
+
+               viewModel.navigateToHomeActivity()
+
+
+
             }
 
 
         }
     }
 }
+
 
 @Composable
 fun SplashScreen() {

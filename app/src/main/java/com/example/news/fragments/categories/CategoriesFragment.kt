@@ -1,4 +1,4 @@
-package com.example.news.fragments
+package com.example.news.fragments.categories
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,11 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.news.R
 import com.example.news.model.Category
 import com.example.news.model.categoriesList
@@ -41,18 +38,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun CategoriesFragment(scope:CoroutineScope,drawerState:DrawerState,onCategoryClick:(String,Int)->Unit) {
-    val shouldDisplaySearchIcon by rememberSaveable {
-        mutableStateOf(false)
-    }
-    val shouldDisplayMenuIcon by rememberSaveable {
-        mutableStateOf(true)
-    }
+fun CategoriesFragment(viewModel:CategoriesViewModel= viewModel(), scope:CoroutineScope, drawerState:DrawerState, onCategoryClick:(String, Int)->Unit) {
+
 
     Scaffold(topBar = {
         NewsTopAppBar(
-            shouldDisplaySearchIcon = shouldDisplaySearchIcon,
-            shouldDisplayMenuIcon = shouldDisplayMenuIcon,
+            shouldDisplaySearchIcon = false,
+            shouldDisplayMenuIcon = true,
             titleResourceId = R.string.app_name, scope = scope, drawerState = drawerState
         ) {
             scope.launch {
@@ -68,11 +60,13 @@ fun CategoriesFragment(scope:CoroutineScope,drawerState:DrawerState,onCategoryCl
                 text = stringResource(R.string.pick_your_category_of_interest),
                 fontSize = 22.sp, fontFamily = Poppins, color = textColor,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth().padding(start = 24.dp, top = 24.dp, bottom = 16.dp,end=24.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, top = 24.dp, bottom = 16.dp, end = 24.dp)
             )
-            CategoriesList(onCategoryClick = { id, name ->
+            CategoriesList(viewModel) { id, name ->
                 onCategoryClick(id, name)
-            })
+            }
 
         }
     }
@@ -80,10 +74,10 @@ fun CategoriesFragment(scope:CoroutineScope,drawerState:DrawerState,onCategoryCl
 }
 
 @Composable
-private fun CategoriesList(onCategoryClick:(String,Int)->Unit) {
+private fun CategoriesList(viewModel: CategoriesViewModel,onCategoryClick:(String,Int)->Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),modifier=Modifier.padding(horizontal = 10.dp)) {
-        items(categoriesList.size) { index ->
-            CategoryItem(categoriesList[index],onCategoryClick={id,name->onCategoryClick(id,name)})
+        items(viewModel.categories.size) { index ->
+            CategoryItem(viewModel.categories[index],onCategoryClick={id,name->onCategoryClick(id,name)})
         }
     }
 }
@@ -110,7 +104,7 @@ private fun PreviewCategoryItem() {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewCategoriesList() {
-    CategoriesList{id,name->
+    CategoriesList(viewModel()){ id, name->
 
     }
 }
@@ -118,7 +112,7 @@ private fun PreviewCategoriesList() {
 @Preview(showSystemUi = true)
 @Composable
 private fun PreviewCategoriesFragment() {
-    CategoriesFragment( rememberCoroutineScope(), rememberDrawerState(initialValue = DrawerValue.Closed)) { id, name ->
+    CategoriesFragment(viewModel(), rememberCoroutineScope(), rememberDrawerState(initialValue = DrawerValue.Closed)) { id, name ->
 
     }
 }

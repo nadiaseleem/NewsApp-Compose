@@ -7,12 +7,12 @@ import retrofit2.http.Query
 
 interface NewsService {
     @GET("/v2/everything")
-    fun getNews(@Query("sources") sourceId:String,@Query("apiKey")apiKey:String): Call<NewsResponse>
+    fun getNews(@Query("sources") sourceId:String,@Query("apiKey")apiKey:String=ApiConstants.getApiKey()): Call<NewsResponse>
 
     @GET("/v2/everything")
-    fun getArticle(@Query("q")title:String,@Query("searchIn")field:String,@Query("apiKey")apiKey:String):Call<NewsResponse>
+    fun getArticle(@Query("q")title:String,@Query("searchIn")field:String,@Query("apiKey")apiKey:String=ApiConstants.getApiKey()):Call<NewsResponse>
 
     @GET("/v2/everything")
-    fun getSearchedArticles(@Query("q")searchQuery:String,@Query("apiKey")apiKey:String):Call<NewsResponse>
+    fun getSearchedArticles(@Query("q")searchQuery:String,@Query("apiKey")apiKey:String=ApiConstants.getApiKey()):Call<NewsResponse>
 
 }
